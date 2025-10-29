@@ -1,0 +1,54 @@
+
+spring:
+  application:
+    name: rabbit-pengembalian
+  cloud:
+    compatibility-verifier:
+      enabled: false
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    template:
+      exchange: pengembalian.exchange
+    listener:
+      simple:
+        default-requeue-rejected: false
+        auto-startup: false  # Disable auto-startup until RabbitMQ is available
+
+server:
+  port: 8089
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+app:
+  rabbitmq-pengembalian:
+    queue: pengembalian.queue
+    exchange: pengembalian.exchange
+    routing-key: pengembalian.routing.key
+  mail:
+    host: "smtp.gmail.com"
+    port: 587
+    username: "your email"
+    from: "your email"
+    password: "your password"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: smtp.gmail.com
+
+logging:
+  level:
+    '[com.key.rabbitmq_service]': DEBUG
+    '[org.springframework.mail.javamail]': DEBUG
+    '[jakarta.mail]': DEBUG

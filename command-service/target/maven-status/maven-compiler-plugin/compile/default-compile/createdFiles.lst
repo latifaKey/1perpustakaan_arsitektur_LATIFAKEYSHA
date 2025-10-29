@@ -1,0 +1,16 @@
+com\key\commandservice\repository\BukuRepository.class
+com\key\commandservice\command\CreateAnggotaCommand.class
+com\key\commandservice\command\CreatePeminjamanCommand.class
+com\key\commandservice\service\EventPublisher.class
+com\key\commandservice\service\AnggotaCommandService.class
+com\key\commandservice\event\BukuCreatedEvent.class
+com\key\commandservice\repository\AnggotaRepository.class
+com\key\commandservice\model\Anggota.class
+com\key\commandservice\model\Buku.class
+com\key\commandservice\event\AnggotaCreatedEvent.class
+com\key\commandservice\repository\PeminjamanRepository.class
+com\key\commandservice\controller\AnggotaCommandController.class
+com\key\commandservice\model\Peminjaman.class
+com\key\commandservice\CommandServiceApplication.class
+com\key\commandservice\command\CreateBukuCommand.class
+com\key\commandservice\event\PeminjamanCreatedEvent.class

@@ -1,0 +1,13 @@
+com\key\queryservice\messaging\QueryServiceMessageListener.class
+com\key\queryservice\controller\PeminjamanQueryController.class
+com\key\queryservice\repository\PeminjamanViewRepository.class
+com\key\queryservice\repository\BukuViewRepository.class
+com\key\queryservice\model\BukuView.class
+com\key\queryservice\config\RabbitMQConfig.class
+com\key\queryservice\model\AnggotaView.class
+com\key\queryservice\repository\AnggotaViewRepository.class
+com\key\queryservice\service\BukuQueryService.class
+com\key\queryservice\service\PeminjamanQueryService.class
+com\key\queryservice\QueryServiceApplication.class
+com\key\queryservice\service\AnggotaQueryService.class
+com\key\queryservice\model\PeminjamanView.class

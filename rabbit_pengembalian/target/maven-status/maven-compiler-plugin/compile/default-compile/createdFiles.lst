@@ -1,0 +1,8 @@
+com\key\rabbitpengembalian\vo\ResponseTemplate.class
+com\key\rabbitpengembalian\vo\Buku.class
+com\key\rabbitpengembalian\RabbitmqPengembalianServiceApplication.class
+com\key\rabbitpengembalian\vo\Peminjaman.class
+com\key\rabbitpengembalian\vo\Pengembalian.class
+com\key\rabbitpengembalian\RabbitMQConfig.class
+com\key\rabbitpengembalian\vo\Anggota.class
+com\key\rabbitpengembalian\PengembalianConsumerService.class

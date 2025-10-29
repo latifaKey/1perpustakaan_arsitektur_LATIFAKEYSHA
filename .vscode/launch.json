@@ -1,0 +1,74 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "EurekaApplication",
+            "request": "launch",
+            "mainClass": "com.key.eureka.EurekaApplication"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-AnggotaApplication<anggota>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.key.anggota.AnggotaApplication",
+            "projectName": "anggota",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=62933 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=anggota"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-BukuApplication<buku>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.key.buku.BukuApplication",
+            "projectName": "buku",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=62934 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=buku"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-PeminjamanApplication<peminjaman>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.key.peminjaman.PeminjamanApplication",
+            "projectName": "peminjaman",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=62935 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=peminjaman"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-PengembalianApplication<pengembalian>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.key.pengembalian.PengembalianApplication",
+            "projectName": "pengembalian",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=62936 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=pengembalian"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ApiGetAwayApplication<api-get-away>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.key.api_get_away.ApiGetAwayApplication",
+            "projectName": "api-get-away",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-EurekaApplication<eureka>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.key.eureka.EurekaApplication",
+            "projectName": "eureka",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

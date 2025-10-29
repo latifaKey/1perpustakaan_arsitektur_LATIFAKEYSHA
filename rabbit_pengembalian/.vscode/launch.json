@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-RabbitmqPengembalianServiceApplication<rabbit-pengembalian>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.key.rabbitpengembalian.RabbitmqPengembalianServiceApplication",
+            "projectName": "rabbit-pengembalian",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
