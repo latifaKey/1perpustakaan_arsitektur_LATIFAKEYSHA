@@ -3,11 +3,11 @@ pipeline {
 
     environment {
         // --- KONFIGURASI KHUSUS ANGGOTA SERVICE ---
+        // Author: Latifa Keysha (2311083019) - TRPL 3C
         SERVICE_NAME = 'anggotaservice'
-        DOCKER_DIR = 'PerpustakaanService/anggotaservice' 
+        DOCKER_DIR = 'anggota'
         K8S_DEPLOYMENT = 'anggota-deployment'
         K8S_NS = 'perpustakaan-ns'
-        // Nama container di dalam file YAML deployment (biasanya anggota-container)
         CONTAINER_NAME = 'anggota-container'
         
         // Gunakan Tag Statis 1.0 agar hemat penyimpanan

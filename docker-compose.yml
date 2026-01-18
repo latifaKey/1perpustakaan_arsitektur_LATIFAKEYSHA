@@ -1,4 +1,23 @@
 services:
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: perpustakaan-rabbitmq
+    ports:
+      - "5672:5672"      # AMQP port
+      - "15672:15672"    # Management UI
+    networks:
+      - perpustakaan-network
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
   eureka-server:
     build:
       context: ./eureka
@@ -65,14 +84,20 @@ services:
       dockerfile: dockerfile
     container_name: perpustakaan-peminjaman
     ports:
-      - "10083:8083"
+      - "10083:8084"
     depends_on:
       eureka-server:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     networks:
       - perpustakaan-network
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
 
   pengembalian-service:
     build:
@@ -80,14 +105,20 @@ services:
       dockerfile: dockerfile
     container_name: perpustakaan-pengembalian
     ports:
-      - "10084:8084"
+      - "10084:8085"
     depends_on:
       eureka-server:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     networks:
       - perpustakaan-network
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
 
   command-service:
     build:
@@ -95,14 +126,20 @@ services:
       dockerfile: dockerfile
     container_name: perpustakaan-command
     ports:
-      - "10085:8085"
+      - "10085:8088"
     depends_on:
       eureka-server:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     networks:
       - perpustakaan-network
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
 
   query-service:
     build:
@@ -110,14 +147,20 @@ services:
       dockerfile: dockerfile
     container_name: perpustakaan-query
     ports:
-      - "10086:8086"
+      - "10086:8087"
     depends_on:
       eureka-server:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     networks:
       - perpustakaan-network
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
 
   rabbitmq-peminjaman:
     build:
@@ -125,14 +168,20 @@ services:
       dockerfile: dockerfile
     container_name: perpustakaan-rabbitmq-peminjaman
     ports:
-      - "10087:8087"
+      - "10087:8086"
     depends_on:
       eureka-server:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     networks:
       - perpustakaan-network
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
 
   rabbitmq-pengembalian:
     build:
@@ -140,15 +189,25 @@ services:
       dockerfile: dockerfile
     container_name: perpustakaan-rabbitmq-pengembalian
     ports:
-      - "10088:8088"
+      - "10088:8089"
     depends_on:
       eureka-server:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     networks:
       - perpustakaan-network
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
 
 networks:
   perpustakaan-network:
     driver: bridge
+
+volumes:
+  rabbitmq_data:
+    driver: local

@@ -17,4 +17,5 @@ public class Pengembalian {
     private String tanggalDikembalikan;
     private Double denda;
     private String terlambat;
+    private String status; // Status pengembalian: "SELESAI" atau "PENDING"
 }

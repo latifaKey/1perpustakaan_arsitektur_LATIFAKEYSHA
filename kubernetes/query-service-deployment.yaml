@@ -1,0 +1,50 @@
+# kubernetes/query-service-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-deployment
+  namespace: perpustakaan-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: query-service
+  template:
+    metadata:
+      labels:
+        app: query-service
+    spec:
+      containers:
+        - name: query-container
+          image: perpustakaan/query-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8087
+          env:
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: "http://eureka-server:8761/eureka/"
+            - name: SPRING_RABBITMQ_HOST
+              value: "rabbitmq"
+            - name: SPRING_RABBITMQ_PORT
+              value: "5672"
+            - name: SPRING_RABBITMQ_USERNAME
+              value: "guest"
+            - name: SPRING_RABBITMQ_PASSWORD
+              value: "guest"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-service
+  namespace: perpustakaan-ns
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/actuator/prometheus"
+    prometheus.io/port: "8087"
+spec:
+  selector:
+    app: query-service
+  ports:
+    - protocol: TCP
+      port: 8087
+      targetPort: 8087

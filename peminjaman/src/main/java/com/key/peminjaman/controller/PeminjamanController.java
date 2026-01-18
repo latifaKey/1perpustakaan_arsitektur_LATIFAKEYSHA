@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.key.peminjaman.model.Peminjaman;
@@ -48,6 +49,13 @@ public class PeminjamanController {
     @PostMapping
     public Peminjaman createPeminjaman(@RequestBody Peminjaman peminjaman) {
         return peminjamanService.createPeminjaman(peminjaman);
+    }
+    
+    // PUT update peminjaman
+    @PutMapping("/{id}")
+    public ResponseEntity<Peminjaman> updatePeminjaman(@PathVariable Long id, @RequestBody Peminjaman peminjaman) {
+        Peminjaman updatedPeminjaman = peminjamanService.updatePeminjaman(id, peminjaman);
+        return updatedPeminjaman != null ? ResponseEntity.ok(updatedPeminjaman) : ResponseEntity.notFound().build();
     }
     
     // DELETE peminjaman

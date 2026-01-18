@@ -1,0 +1,50 @@
+# kubernetes/rabbit-pengembalian-service-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbit-pengembalian-deployment
+  namespace: perpustakaan-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbit-pengembalian-service
+  template:
+    metadata:
+      labels:
+        app: rabbit-pengembalian-service
+    spec:
+      containers:
+        - name: rabbit-pengembalian-container
+          image: perpustakaan/rabbit-pengembalian-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8089
+          env:
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: "http://eureka-server:8761/eureka/"
+            - name: SPRING_RABBITMQ_HOST
+              value: "rabbitmq"
+            - name: SPRING_RABBITMQ_PORT
+              value: "5672"
+            - name: SPRING_RABBITMQ_USERNAME
+              value: "guest"
+            - name: SPRING_RABBITMQ_PASSWORD
+              value: "guest"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbit-pengembalian-service
+  namespace: perpustakaan-ns
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/actuator/prometheus"
+    prometheus.io/port: "8089"
+spec:
+  selector:
+    app: rabbit-pengembalian-service
+  ports:
+    - protocol: TCP
+      port: 8089
+      targetPort: 8089

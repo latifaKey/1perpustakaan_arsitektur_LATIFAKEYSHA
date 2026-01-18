@@ -16,4 +16,5 @@ public class Anggota {
     private String alamat;
     private String email;
     private String telepon;
+    private String status; // Status anggota: "AKTIF" atau "TIDAK_AKTIF"
 }

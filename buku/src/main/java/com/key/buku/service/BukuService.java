@@ -26,6 +26,19 @@ public class BukuService {
         return bukuRepository.save(buku);
     }
 
+    public Buku updateBuku(Long id, Buku bukuDetails) {
+        Optional<Buku> bukuOptional = bukuRepository.findById(id);
+        if (bukuOptional.isPresent()) {
+            Buku buku = bukuOptional.get();
+            buku.setJudul(bukuDetails.getJudul());
+            buku.setPengarang(bukuDetails.getPengarang());
+            buku.setPenerbit(bukuDetails.getPenerbit());
+            buku.setStatus(bukuDetails.getStatus());
+            return bukuRepository.save(buku);
+        }
+        return null;
+    }
+
     public void deleteBuku(Long id) {
         bukuRepository.deleteById(id);
     }

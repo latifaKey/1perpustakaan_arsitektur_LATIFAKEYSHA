@@ -27,6 +27,20 @@ public class AnggotaService {
         return anggotaRepository.save(anggota);
     }
     
+    public Anggota updateAnggota(Long id, Anggota anggotaDetails) {
+        Optional<Anggota> anggotaOptional = anggotaRepository.findById(id);
+        if (anggotaOptional.isPresent()) {
+            Anggota anggota = anggotaOptional.get();
+            anggota.setNama(anggotaDetails.getNama());
+            anggota.setAlamat(anggotaDetails.getAlamat());
+            anggota.setEmail(anggotaDetails.getEmail());
+            anggota.setTelepon(anggotaDetails.getTelepon());
+            anggota.setStatus(anggotaDetails.getStatus());
+            return anggotaRepository.save(anggota);
+        }
+        return null;
+    }
+    
     public void deleteAnggota(Long id) {
         anggotaRepository.deleteById(id);
     }

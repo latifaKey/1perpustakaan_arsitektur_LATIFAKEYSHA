@@ -1,0 +1,39 @@
+# Kubernetes Namespaces untuk Sistem Perpustakaan
+# Author: Latifa Keysha (2311083019) - TRPL 3C
+# Sesuai dengan panduan PDF: Tahap 3 - Konfigurasi Dasar Kubernetes
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: perpustakaan-ns
+  labels:
+    name: perpustakaan-ns
+    environment: development
+    project: perpustakaan-microservices
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jenkins-ns
+  labels:
+    name: jenkins-ns
+    environment: cicd
+    project: perpustakaan-microservices
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: logging-ns
+  labels:
+    name: logging-ns
+    environment: observability
+    project: perpustakaan-microservices
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring-ns
+  labels:
+    name: monitoring-ns
+    environment: observability
+    project: perpustakaan-microservices

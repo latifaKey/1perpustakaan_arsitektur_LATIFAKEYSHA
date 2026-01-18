@@ -1,0 +1,21 @@
+# Persistent Volume Claim untuk MongoDB
+# Author: Latifa Keysha (2311083019) - TRPL 3C
+# Sesuai dengan panduan PDF: Tahap 4 - Infrastructure Pendukung
+# PVC memastikan data MongoDB tidak hilang saat pod restart
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-pvc
+  namespace: perpustakaan-ns
+  labels:
+    app: mongodb
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  # Untuk Docker Desktop Kubernetes, gunakan hostpath
+  # Untuk cloud, ganti dengan storage class yang sesuai
+  storageClassName: hostpath

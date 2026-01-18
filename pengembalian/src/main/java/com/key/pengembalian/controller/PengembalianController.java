@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,6 +43,12 @@ public class PengembalianController {
     @PostMapping
     public Pengembalian createPengembalian(@RequestBody Pengembalian pengembalian){
         return pengembalianService.createPengembalian(pengembalian);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Pengembalian> updatePengembalian(@PathVariable Long id, @RequestBody Pengembalian pengembalian) {
+        Pengembalian updated = pengembalianService.updatePengembalian(id, pengembalian);
+        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")

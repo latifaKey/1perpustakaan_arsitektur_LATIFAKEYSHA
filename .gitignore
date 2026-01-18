@@ -1,0 +1,56 @@
+# Build artifacts - Maven
+**/target/
+**/bin/
+**/build/
+*.jar
+*.war
+*.ear
+*.class
+
+# IDE files - VS Code, IntelliJ, Eclipse
+.vscode/
+.idea/
+*.iml
+*.iws
+*.ipr
+*.code-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.cache
+
+# Maven wrapper jar
+.mvn/wrapper/maven-wrapper.jar
+
+# Docker volumes & data
+data/
+volumes/
+
+# Environment files
+.env
+.env.local
+
+# Spring Boot
+application-local.properties
+application-local.yml
+
+# H2 Database files
+*.db
+*.mv.db
+*.trace.db
+
+# Test output
+test-output/

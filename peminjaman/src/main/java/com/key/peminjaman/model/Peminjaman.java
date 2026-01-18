@@ -17,4 +17,5 @@ public class Peminjaman {
     private Long bukuId;
     private String tanggalPinjam;
     private String tanggalKembali;
+    private String status; // Status peminjaman: "DIPINJAM" atau "DIKEMBALIKAN"
 }

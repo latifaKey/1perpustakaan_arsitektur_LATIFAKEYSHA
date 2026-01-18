@@ -1,0 +1,50 @@
+# kubernetes/peminjaman-service-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: peminjaman-command-deployment # Nama unik untuk deployment ini
+  namespace: perpustakaan-ns
+spec:
+  replicas: 1 # Kita mulai dengan 1 replika
+  selector:
+    matchLabels:
+      app: peminjaman-command # Selector harus cocok dengan label di template
+  template:
+    metadata:
+      labels:
+        app: peminjaman-command # Label untuk Pod ini
+    spec:
+      containers:
+        - name: peminjaman-command-container
+          image: perpustakaan/peminjaman-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8084
+          env:
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: "http://eureka-server:8761/eureka/"
+            - name: SPRING_RABBITMQ_HOST
+              value: "rabbitmq"
+            - name: SPRING_RABBITMQ_PORT
+              value: "5672"
+            - name: SPRING_RABBITMQ_USERNAME
+              value: "guest"
+            - name: SPRING_RABBITMQ_PASSWORD
+              value: "guest"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: peminjaman-service # Service DNS akan bernama 'peminjaman-service'
+  namespace: perpustakaan-ns
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/actuator/prometheus"
+    prometheus.io/port: "8084"
+spec:
+  selector:
+    app: peminjaman-command
+  ports:
+    - protocol: TCP
+      port: 8084
+      targetPort: 8084

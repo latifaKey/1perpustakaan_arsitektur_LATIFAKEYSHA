@@ -65,6 +65,20 @@ public class PeminjamanService {
         return peminjamanRepository.save(peminjaman);
     }
     
+    public Peminjaman updatePeminjaman(Long id, Peminjaman peminjamanDetails) {
+        Optional<Peminjaman> peminjamanOptional = peminjamanRepository.findById(id);
+        if (peminjamanOptional.isPresent()) {
+            Peminjaman peminjaman = peminjamanOptional.get();
+            peminjaman.setAnggotaId(peminjamanDetails.getAnggotaId());
+            peminjaman.setBukuId(peminjamanDetails.getBukuId());
+            peminjaman.setTanggalPinjam(peminjamanDetails.getTanggalPinjam());
+            peminjaman.setTanggalKembali(peminjamanDetails.getTanggalKembali());
+            peminjaman.setStatus(peminjamanDetails.getStatus());
+            return peminjamanRepository.save(peminjaman);
+        }
+        return null;
+    }
+    
     public void deletePeminjaman(Long id) {
         peminjamanRepository.deleteById(id);
     }

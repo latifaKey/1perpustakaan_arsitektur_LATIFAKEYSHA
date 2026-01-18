@@ -114,6 +114,17 @@ public class PengembalianService {
         pengembalianRepository.deleteById(id);
     }
 
+    public Pengembalian updatePengembalian(Long id, Pengembalian pengembalianDetails) {
+        return pengembalianRepository.findById(id).map(pengembalian -> {
+            pengembalian.setPeminjamanId(pengembalianDetails.getPeminjamanId());
+            pengembalian.setTanggalDikembalikan(pengembalianDetails.getTanggalDikembalikan());
+            pengembalian.setDenda(pengembalianDetails.getDenda());
+            pengembalian.setTerlambat(pengembalianDetails.getTerlambat());
+            pengembalian.setStatus(pengembalianDetails.getStatus());
+            return pengembalianRepository.save(pengembalian);
+        }).orElse(null);
+    }
+
     public List<ResponseTemplate> getPengembalianWithPeminjamanById(Long id) {
         List<ResponseTemplate> responseTemplates = new ArrayList<>();
         Pengembalian pengembalian = getPengembalianById(id);
