@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.key.peminjaman.model.Peminjaman;
 import com.key.peminjaman.service.PeminjamanService;
+import com.key.peminjaman.vo.ResponseTemplate;
 
 import java.util.List;
 
@@ -35,6 +36,13 @@ public class PeminjamanController {
         Peminjaman peminjaman = peminjamanService.getPeminjamanById(id);
         return peminjaman != null ? ResponseEntity.ok(peminjaman) : ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/{id}/detail")
+    public ResponseEntity<List<ResponseTemplate>> getPeminjamanWithAnggotaId(@PathVariable Long id) {
+        List<ResponseTemplate> responseTemplates = peminjamanService.getPeminjamanWithAnggotaId(id);
+        return responseTemplates != null ? ResponseEntity.ok(responseTemplates) : ResponseEntity.notFound().build();
+    }
+
     
     // POST create new peminjaman
     @PostMapping

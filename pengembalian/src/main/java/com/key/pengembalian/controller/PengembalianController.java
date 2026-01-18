@@ -1,6 +1,5 @@
 package com.key.pengembalian.controller;
 
-import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +40,7 @@ public class PengembalianController {
     }
 
     @PostMapping
-    public Pengembalian createPengembalian(@RequestBody Pengembalian pengembalian) throws ParseException{
+    public Pengembalian createPengembalian(@RequestBody Pengembalian pengembalian){
         return pengembalianService.createPengembalian(pengembalian);
     }
 

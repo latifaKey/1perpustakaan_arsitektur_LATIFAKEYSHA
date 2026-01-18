@@ -15,6 +15,6 @@ public class Peminjaman {
     private Long id;
     private Long anggotaId;
     private Long bukuId;
-    private LocalDate tanggalPinjam;
-    private LocalDate tanggalKembali;
+    private String tanggalPinjam;
+    private String tanggalKembali;
 }

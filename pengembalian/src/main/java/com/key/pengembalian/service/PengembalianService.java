@@ -1,11 +1,13 @@
 package com.key.pengembalian.service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,29 +60,53 @@ public class PengembalianService {
         return pengembalianRepository.findById(id).orElse(null);
     }
 
-    public Pengembalian createPengembalian(Pengembalian pengembalian) throws ParseException {
+    public Pengembalian createPengembalian(Pengembalian pengembalian) {
         Peminjaman peminjaman = this.getPeminjaman(pengembalian.getPeminjamanId());
 
         if (peminjaman == null) {
-            throw new RuntimeException("Data peminjaman tidak ditemukan untuk id: " + pengembalian.getPeminjamanId());
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND,
+                    "Data peminjaman tidak ditemukan untuk id: " + pengembalian.getPeminjamanId());
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        Date tanggalKembali = sdf.parse(peminjaman.getTanggalKembali());
-        Date tanggalDikembalikan = sdf.parse(pengembalian.getTanggalDikembalikan());
+        // Parse dates (support dd-MM-yyyy and yyyy-MM-dd)
+        LocalDate tanggalKembali;
+        LocalDate tanggalDikembalikan;
+        try {
+            tanggalKembali = parseToLocalDate(peminjaman.getTanggalKembali());
+            tanggalDikembalikan = parseToLocalDate(pengembalian.getTanggalDikembalikan());
+        } catch (DateTimeParseException ex) {
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST,
+                    "Format tanggal tidak valid, gunakan dd-MM-yyyy atau yyyy-MM-dd");
+        }
 
-        long kembali = tanggalDikembalikan.getTime() - tanggalKembali.getTime();
-        long jumlahHari = kembali < 0 ? 0 : Math.abs(kembali);
-        long terlambat = TimeUnit.DAYS.convert(jumlahHari, TimeUnit.MILLISECONDS);
+        long terlambat = ChronoUnit.DAYS.between(tanggalKembali, tanggalDikembalikan);
+        if (terlambat < 0) {
+            terlambat = 0;
+        }
         double denda = terlambat * 1000;
 
         pengembalian.setTerlambat(terlambat + " Hari");
         pengembalian.setDenda(denda);
 
-        rabbitTemplate.convertAndSend(exchange, routingKey, pengembalian);
-        log.info("Message sent to exchange [{}] with routing key [{}], Payload: {}", exchange, routingKey, pengembalian);
+        // Send to RabbitMQ (optional - continue if RabbitMQ is not available)
+        try {
+            rabbitTemplate.convertAndSend(exchange, routingKey, pengembalian);
+            log.info("Message sent to exchange [{}] with routing key [{}], Payload: {}", exchange, routingKey, pengembalian);
+        } catch (Exception e) {
+            log.warn("RabbitMQ tidak tersedia, melanjutkan tanpa mengirim pesan: {}", e.getMessage());
+        }
 
         return pengembalianRepository.save(pengembalian);
+    }
+
+    private LocalDate parseToLocalDate(String value) {
+        DateTimeFormatter f1 = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter f2 = DateTimeFormatter.ISO_LOCAL_DATE; // yyyy-MM-dd
+        try {
+            return LocalDate.parse(value, f1);
+        } catch (DateTimeParseException ex) {
+            return LocalDate.parse(value, f2);
+        }
     }
 
 
@@ -96,7 +122,7 @@ public class PengembalianService {
             return null;
         }
 
-        ServiceInstance serviceInstance = discoveryClient.getInstances("API-GATEWAY-PUSTAKA").get(0);
+        ServiceInstance serviceInstance = discoveryClient.getInstances("api-gateway-pustaka").get(0);
 
         Peminjaman peminjaman = restTemplate.getForObject(serviceInstance.getUri() + "/api/peminjaman/" + pengembalian.getPeminjamanId(), Peminjaman.class);
         Anggota anggota = restTemplate.getForObject(serviceInstance.getUri() + "/api/anggota/" + peminjaman.getAnggotaId(), Anggota.class);
@@ -113,11 +139,29 @@ public class PengembalianService {
     }
 
     public Peminjaman getPeminjaman(Long id) {
+        // Try via API Gateway first
         try {
-            ServiceInstance serviceInstance = discoveryClient.getInstances("API-GATEWAY-PUSTAKA").get(0);
-            Peminjaman peminjaman = restTemplate.getForObject(serviceInstance.getUri() + "/api/peminjaman/" + id, Peminjaman.class);
-            return peminjaman;        
+            java.util.List<ServiceInstance> instances = discoveryClient.getInstances("api-gateway-pustaka");
+            if (instances != null && !instances.isEmpty()) {
+                ServiceInstance gateway = instances.get(0);
+                String gatewayUrl = gateway.getUri() + "/api/peminjaman/" + id;
+                log.info("Trying to get peminjaman via gateway: {}", gatewayUrl);
+                Peminjaman result = restTemplate.getForObject(gatewayUrl, Peminjaman.class);
+                if (result != null) {
+                    return result;
+                }
+            }
         } catch (Exception e) {
+            log.warn("Request via API Gateway failed for peminjaman id {}: {}", id, e.getMessage());
+        }
+
+        // Fallback: call peminjaman service directly
+        try {
+            String directUrl = "http://localhost:8084/api/peminjaman/" + id;
+            log.info("Fallback: calling peminjaman directly at {}", directUrl);
+            return restTemplate.getForObject(directUrl, Peminjaman.class);
+        } catch (Exception e) {
+            log.error("Direct request to peminjaman service failed for id {}: {}", id, e.getMessage());
             return null;
         }
     }

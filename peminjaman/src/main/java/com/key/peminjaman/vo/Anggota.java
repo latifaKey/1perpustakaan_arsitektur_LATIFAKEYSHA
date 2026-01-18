@@ -17,7 +17,6 @@ public class Anggota {
     this.nama = nama;
     this.alamat = alamat;
     this.email = email;
-    this.jenis_kelamin = jenis_kelamin;
   }
 
   public Long getId() {
@@ -50,10 +49,5 @@ public class Anggota {
   public void setEmail(String email) {
     this.email = email;
   }
-  public String getJenis_kelamin() {
-    return jenis_kelamin;
-  }
-  public void setJenis_kelamin(String jenis_kelamin) {
-    this.jenis_kelamin = jenis_kelamin;
-  }
+
 }
